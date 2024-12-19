@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Interactive Button</title>
+    <link rel="stylesheet" href="./style/bootstrap-grid.css">
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="./script/konva.min.js"></script>
+</head>
+<body>
+<div id="element">
+</div>
+<nav class="bootstrap-wrapper">
+    <div class="container">
+        <div class="col-12">
+            <div class="nav-title">
+                <span>CAN’T STOP BUYING</span>
+            </div>
+            <div class="nav-items">
+                <a href="#">Almost Free</a>
+                <a href="#">Useless Stuff</a>
+                <a href="#">Instant Regrets</a>
+                <a href="#">Collector of Dust</a>
+            </div>
+            <div class="nav-icons">
+                <div class="icon">
+                </div>
+                <div class="icon">
+                </div>
+                <div class="icon">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="bootstrap-wrapper product-info">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+<!--
+hat :Fashion Hat $99999999  /Extra 10% Off
+potato chips: Crunchy Potato Chips $45/Buy One Get One Free.Free shipping
+俗頭:Cute Stone Pet $666 / The Last One in the World
+洋裝:Lily of the Valley $8888/Special Discount
+銀色果汁機:Juicy Salif $6395/ Limited Time Offer
+
+-->
+                <h1 class="product-title">Potato <br>Chips</h1>
+<!--                <h1 class="product-title">Lily of <br>the<br>Valley</h1>-->
+                <h2 class="product-money">
+                    $45
+<!--                    $8888-->
+                </h2>
+<!--                <p class="discount-info">/Buy One Get One Free.<br>/Free shipping</p>-->
+                <p class="discount-info">/Special Discount</p>
+            </div>
+        </div>
+    </div>
+</div>
+<main>
+    <div id="container" style="position: absolute;"></div>
+    <div class="runaway-button-container">
+        <div id="runawayButton"></div>
+    </div>
+</main>
+<script src="./script/control.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new RunawayButton('runawayButton', 'container');
+    });
+
+</script>
+<script src="./script/effect.js"></script>
+<script>
+/*
+*
+hat :Fashion Hat $99999999  /Extra 10% Off
+potato chips: Crunchy Potato Chips $45/Buy One Get One Free.Free shipping
+俗頭:Cute Stone Pet $666 / The Last One in the World
+洋裝:Lily of the Valley $8888/Special Discount
+銀色果汁機:Juicy Salif $6395/ Limited Time Offer
+*/
+const products = [
+    {
+        title: "Fashion<br>Hat",
+        price: "$99999999",
+        discount: "/Extra 10% Off",
+        imagePath: './img/products/hat.png',
+        eraseProgressThreshold: 95
+    },
+    {
+        title: "Potato<br>Chips",
+        price: "$45",
+        discount: "/Buy One Get One Free. Free shipping",
+        imagePath: './img/products/cookie.png',
+        eraseProgressThreshold: 90
+    },
+    {
+        title: "Cute<br>Stone<br>Pet",
+        price: "$666",
+        discount: "/The Last One in the World",
+        imagePath: './img/products/stone.png',
+        eraseProgressThreshold: 95
+    },
+    {
+        title: "Lily of<br>the<br>Valley",
+        price: "$8888",
+        discount: "/Special Discount",
+        imagePath: './img/products/dress.png',
+        eraseProgressThreshold: 96
+    },
+    {
+        title: "Juicy<br>Salif",
+        price: "$6395",
+        discount: "/Limited Time Offer",
+        imagePath: './img/products/fruit-machine.png',
+        eraseProgressThreshold: 99
+    }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 從 localStorage 中取得上次顯示的商品索引
+    let currentIndex = parseInt(localStorage.getItem('currentProductIndex')) || 0;
+
+    // 選取當前商品
+    const currentProduct = products[currentIndex];
+
+    // 更新頁面內容
+    const productTitleElement = document.querySelector('.product-title');
+    const productMoneyElement = document.querySelector('.product-money');
+    const discountInfoElement = document.querySelector('.discount-info');
+    const containerElement = document.querySelector('#container');
+
+    productTitleElement.innerHTML = currentProduct.title;
+    productMoneyElement.textContent = currentProduct.price;
+    discountInfoElement.textContent = currentProduct.discount;
+
+    // 更新圖片效果
+    const obj = new CanvasEffect(containerElement.id, currentProduct.imagePath);
+    obj.eraseProgressThreshold = currentProduct.eraseProgressThreshold;
+
+    // 更新索引，若到達最後一個則重置為 0
+    currentIndex = (currentIndex + 1) % products.length;
+
+    // 將新的索引存回 localStorage
+    localStorage.setItem('currentProductIndex', currentIndex + '');
+});
+
+</script>
+</body>
+</html>
